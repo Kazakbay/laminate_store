@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from database import SessionLocal, Product, Order
-from .routers import cart
+from routers import cart, order, auth, admin
 
 
 app = FastAPI()
@@ -28,44 +28,7 @@ async def home(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse("index.html", {"request": request, "products": products})
 
 
-@app.get("/order", response_class=HTMLResponse)
-async def order_form(request: Request):
-    return templates.TemplateResponse("order.html", {"request": request})
-
-@app.post("/order")
-async def place_order(
-    name: str = Form(...), phone: str = Form(...), address: str = Form(...),
-    db: Session = Depends(get_db)
-):
-    new_order = Order(customer_name=name, phone=phone, address=address)
-    db.add(new_order)
-    db.commit()
-    return RedirectResponse("/", status_code=302)
-
-# ---------- Admin Panel ----------
-@app.get("/admin", response_class=HTMLResponse)
-async def admin(request: Request, db: Session = Depends(get_db)):
-    products = db.query(Product).all()
-    orders = db.query(Order).all()
-    return templates.TemplateResponse("admin.html", {"request": request, "products": products, "orders": orders})
-
-@app.get("/admin/add", response_class=HTMLResponse)
-async def add_product_form(request: Request):
-    return templates.TemplateResponse("add_product.html", {"request": request})
-
-@app.post("/admin/add")
-async def add_product(
-    name: str = Form(...), price: int = Form(...), file: UploadFile = File(...), db: Session = Depends(get_db)):
-    # save the image to the uploads folder
-    with open(f"uploads/{file.filename}", "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-
-
-
-    new_product = Product(name=name, price=price, image=file.filename)
-    db.add(new_product)
-    db.commit()
-    return RedirectResponse("/admin", status_code=302)
-
-
 app.include_router(cart.router)
+app.include_router(order.router)
+app.include_router(admin.router)
+app.include_router(auth.router)

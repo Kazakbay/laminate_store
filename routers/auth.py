@@ -5,10 +5,11 @@ from fastapi.responses import HTMLResponse
 templates = Jinja2Templates(directory="templates")
 
 router = APIRouter(
-    prefix='/cart',
-    tags=['cart']
+    prefix='/auth',
+    tags=['auth']
 )
 
-@router.get("/", response_class=HTMLResponse)
+@router.get("/login", response_class=HTMLResponse)
 async def cart(request: Request):
-    return templates.TemplateResponse("cart.html", {"request": request})
+    return templates.TemplateResponse("login.html", {"request": request})
+
