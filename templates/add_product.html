@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Add Product</h2>
+<form method="post" action="/admin/add">
+  <label>Name: <input type="text" name="name" required></label>
+  <label>Price: <input type="number" name="price" required></label>
+  <label>Image URL: <input type="text" name="image" required></label>
+  <button type="submit">Save</button>
+</form>
+{% endblock %}

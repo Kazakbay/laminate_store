@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Admin Panel</h2>
+<a href="/admin/add" class="btn">Add Product</a>
+
+<h3>Products</h3>
+<table>
+  <tr><th>ID</th><th>Name</th><th>Price</th><th>Image</th></tr>
+  {% for p in products %}
+  <tr>
+    <td>{{ p.id }}</td>
+    <td>{{ p.name }}</td>
+    <td>{{ p.price }} ₸</td>
+    <td><img src="{{ url_for('static', path=p.image) }}" width="200px"></td>
+
+  </tr>
+  {% endfor %}
+</table>
+
+<h3>Orders</h3>
+<table>
+  <tr><th>ID</th><th>Name</th><th>Phone</th><th>Address</th></tr>
+  {% for o in orders %}
+  <tr>
+    <td>{{ o.id }}</td>
+    <td>{{ o.customer_name }}</td>
+    <td>{{ o.phone }}</td>
+    <td>{{ o.address }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

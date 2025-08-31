@@ -1,0 +1,40 @@
+# --- Virtual environments ---
+venv/
+.venv/
+env/
+.env/
+
+# --- Python cache / build ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.build/
+build/
+dist/
+*.egg-info/
+
+# --- Env & secrets (adjust if you actually need .env tracked) ---
+*.env
+.env.*
+!.env.example
+
+# --- Logs & temp ---
+*.log
+*.tmp
+*.swp
+
+# --- Coverage / testing ---
+.coverage
+htmlcov/
+.pytest_cache/
+
+# --- IDEs / editors ---
+.vscode/
+.idea/
+*.iml
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
