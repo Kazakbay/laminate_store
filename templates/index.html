@@ -4,7 +4,7 @@
 <div class="grid">
   {% for p in products %}
   <div class="card">
-    <img src="{{ url_for('static', path=p.image) }}" alt="{{ p.name }}">
+    <img src="{{ url_for('uploads', path=p.image) }}" alt="{{ p.name }}">
     <h3>{{ p.name }}</h3>
     <p>{{ p.price }} ₸</p>
     <button onclick="addToCart({{ p.id }}, '{{ p.name }}', {{ p.price }})">Add to Cart</button>

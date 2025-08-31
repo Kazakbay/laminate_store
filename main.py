@@ -1,5 +1,7 @@
-from fastapi import FastAPI, Request, Form, Depends
-from fastapi.responses import HTMLResponse, RedirectResponse
+import shutil
+
+from fastapi import FastAPI, Request, Form, Depends, UploadFile, File
+from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -7,6 +9,7 @@ from database import SessionLocal, Product, Order
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 templates = Jinja2Templates(directory="templates")
 
 # Dependency for DB session
@@ -53,10 +56,15 @@ async def add_product_form(request: Request):
 
 @app.post("/admin/add")
 async def add_product(
-    name: str = Form(...), price: int = Form(...), image: str = Form(...),
-    db: Session = Depends(get_db)
+    name: str = Form(...), price: int = Form(...), file: UploadFile = File(...), db: Session = Depends(get_db)
 ):
-    new_product = Product(name=name, price=price, image=image)
+    # save the image to the uploads folder
+    with open(f"uploads/{file.filename}", "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+
+
+    new_product = Product(name=name, price=price, image=file.filename)
     db.add(new_product)
     db.commit()
     return RedirectResponse("/admin", status_code=302)
