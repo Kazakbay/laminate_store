@@ -6,6 +6,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from database import SessionLocal, Product, Order
+from .routers import cart
+
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -25,9 +27,6 @@ async def home(request: Request, db: Session = Depends(get_db)):
     products = db.query(Product).all()
     return templates.TemplateResponse("index.html", {"request": request, "products": products})
 
-@app.get("/cart", response_class=HTMLResponse)
-async def cart(request: Request):
-    return templates.TemplateResponse("cart.html", {"request": request})
 
 @app.get("/order", response_class=HTMLResponse)
 async def order_form(request: Request):
@@ -56,8 +55,7 @@ async def add_product_form(request: Request):
 
 @app.post("/admin/add")
 async def add_product(
-    name: str = Form(...), price: int = Form(...), file: UploadFile = File(...), db: Session = Depends(get_db)
-):
+    name: str = Form(...), price: int = Form(...), file: UploadFile = File(...), db: Session = Depends(get_db)):
     # save the image to the uploads folder
     with open(f"uploads/{file.filename}", "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
@@ -68,3 +66,6 @@ async def add_product(
     db.add(new_product)
     db.commit()
     return RedirectResponse("/admin", status_code=302)
+
+
+app.include_router(cart.router)
