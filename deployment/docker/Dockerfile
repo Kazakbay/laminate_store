@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y gcc libpq-dev && rm -rf /var/lib/apt/li
 # Copy requirements.txt and main.py from the project root
 COPY deployment/docker/requirements.txt ./requirements.txt
 
-COPY main.py ../..
+COPY ../../ /app/
 
 RUN pip install --no-cache-dir -r requirements.txt
 

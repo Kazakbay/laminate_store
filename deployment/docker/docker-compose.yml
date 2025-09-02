@@ -37,7 +37,10 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./deployment/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./deployment/nginx/fastapi.conf:/etc/nginx/fastapi.conf
+      # монтируем твой nginx.conf (главный файл)
+      - ./../nginx/nginx.conf:/etc/nginx/nginx.conf
+      # монтируем конфиги fastapi и других сайтов
+      - ./../nginx/conf.d/fastapi.conf:/etc/nginx/conf.d/fastapi.conf
     depends_on:
       - fastapi
+    restart: always
