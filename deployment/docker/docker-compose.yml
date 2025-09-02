@@ -4,7 +4,7 @@ services:
     build:
       context: ../..
       dockerfile: deployment/docker/Dockerfile
-    container_name: fastapi_app
+
     ports:
       - "8000:8000"
     depends_on:
@@ -13,6 +13,9 @@ services:
     environment:
       DATABASE_URL: postgres://user:password@db:5432/laminate_store
       REDIS_URL: redis://redis:6379
+
+    networks:
+      - app_net
 
   db:
     image: postgres:15
@@ -24,12 +27,16 @@ services:
       POSTGRES_DB: laminate_store
     ports:
       - "5432:5432"
+    networks:
+      - app_net
 
   redis:
     image: redis:7
     container_name: redis_cache
     ports:
       - "6379:6379"
+    networks:
+      - app_net
 
   nginx:
     image: nginx:latest
@@ -44,3 +51,9 @@ services:
     depends_on:
       - fastapi
     restart: always
+    networks:
+      - app_net
+
+networks:
+  app_net:
+    driver: bridge
