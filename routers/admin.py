@@ -3,9 +3,18 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from starlette.responses import RedirectResponse
-
 from database import Order, SessionLocal, Product
 import shutil
+import cloudinary.uploader
+import io
+import os
+from PIL import Image
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")
+)
 
 templates = Jinja2Templates(directory="templates")
 
@@ -37,10 +46,26 @@ async def add_product_form(request: Request):
 @router.post("/add")
 async def add_product(
     name: str = Form(...), price: int = Form(...), file: UploadFile = File(...), db: Session = Depends(get_db)):
-    # save the image to the uploads folder
-    with open(f"uploads/{file.filename}", "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
 
+    # Open image with Pillow
+    img = Image.open(file.file)
+
+    # Resize if bigger than 1920px (example)
+    img.thumbnail((1920, 1080))
+
+    # Save to memory buffer as JPEG
+    buffer = io.BytesIO()
+    img.save(buffer, format="JPEG", quality=85)
+    buffer.seek(0)
+
+    # Upload smaller file to Cloudinary
+    upload_result = cloudinary.uploader.upload(buffer)
+
+    image_url = upload_result["secure_url"]
+
+
+
+    # save product in DB with image URL
     new_product = Product(name=name, price=price, image=file.filename)
     db.add(new_product)
     db.commit()
