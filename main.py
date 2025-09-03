@@ -12,7 +12,7 @@ from routers import cart, order, auth, admin
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 templates = Jinja2Templates(directory="templates")
 
 # connect to Redis (default port is 6379)

@@ -66,7 +66,7 @@ async def add_product(
 
 
     # save product in DB with image URL
-    new_product = Product(name=name, price=price, image=file.filename)
+    new_product = Product(name=name, price=price, image=image_url)
     db.add(new_product)
     db.commit()
     return RedirectResponse("/admin", status_code=302)
