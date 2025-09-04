@@ -3,9 +3,23 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import OperationalError
 import time
+from dotenv import load_dotenv
+import os
 
-DATABASE_URL = "postgresql+psycopg2://user:password@db:5432/laminate_store"
+# Load variables from .env file
+load_dotenv(override=True)
+print("RAW USE_DOCKER ENV =", os.getenv("USE_DOCKER"))
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
+# Switch between local and docker
+USE_DOCKER = os.getenv("USE_DOCKER", "False") == "True"
+
+
+DATABASE_URL = os.getenv("DATABASE_URL_DOCKER") if USE_DOCKER else os.getenv("DATABASE_URL_LOCAL")
+
+
+print("use_docker = ", USE_DOCKER)
+print("DATABASE_URL= ", DATABASE_URL)
 def get_engine_with_retry(url, retries=10, delay=2):
     for i in range(retries):
         try:

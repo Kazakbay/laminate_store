@@ -16,6 +16,8 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 # connect to Redis (default port is 6379)
+
+
 redis_client = redis.Redis(host="redis", port=6379, db=0)
 # Dependency for DB session
 def get_db():

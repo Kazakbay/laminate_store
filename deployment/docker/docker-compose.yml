@@ -11,6 +11,7 @@ services:
       - db
       - redis
     environment:
+      USE_DOCKER: "True"
       DATABASE_URL: postgres://user:password@db:5432/laminate_store
       REDIS_URL: redis://redis:6379
       CLOUDINARY_CLOUD_NAME: dvvlaugk4
