@@ -13,8 +13,8 @@ services:
     environment:
       IN_DOCKER: "True"
       USE_DOCKER: "True"
-      DATABASE_URL: postgres://user:password@db:5432/laminate_store
-      REDIS_URL: redis://redis:6379
+      DATABASE_URL_DOCKER: postgresql://user:password@db:5432/laminate_store
+      REDIS_URL_DOCKER: redis://redis:6379
       CLOUDINARY_CLOUD_NAME: dvvlaugk4
       CLOUDINARY_API_KEY: 849349744787614
       CLOUDINARY_API_SECRET: N-OqGb1ulyNN0GGIfYK1JbUhrCE

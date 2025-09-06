@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import os
 
 # Load variables from .env file
-if not os.getenv("USE_DOCKER"):
+if not os.getenv("IN_DOCKER"):
     load_dotenv(override=True)
 print("RAW USE_DOCKER ENV =", os.getenv("USE_DOCKER"))
 DEBUG = os.getenv("DEBUG", "False") == "True"
