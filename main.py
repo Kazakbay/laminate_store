@@ -8,17 +8,18 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from database import SessionLocal, Product, Order
 from routers import cart, order, auth, admin
-
+import os
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
+USE_DOCKER = os.getenv("USE_DOCKER", "False") == "True"
 
 # connect to Redis (default port is 6379)
-
-
-redis_client = redis.Redis(host="redis", port=6379, db=0)
+REDIS_URL = os.getenv("REDIS_URL_DOCKER") if USE_DOCKER else os.getenv("REDIS_URL_LOCAL")
+print("REDIS_URL = ", REDIS_URL)
+redis_client = redis.Redis.from_url(REDIS_URL)
 # Dependency for DB session
 def get_db():
     db = SessionLocal()
