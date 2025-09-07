@@ -46,6 +46,7 @@ class Product(Base):
     name = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
     image = Column(String, nullable=False)
+    image_public_id = Column(String) # URL only
 
 class Order(Base):
     __tablename__ = "orders"

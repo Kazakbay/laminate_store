@@ -61,11 +61,16 @@ def update_product(
     upload_result = cloudinary.uploader.upload(buffer)
     image_url = upload_result["secure_url"]
 
+
     # Update product
     product = db.query(Product).filter(Product.id == product_id).first()
+    if product.image_public_id:
+        cloudinary.uploader.destroy(product.image_public_id)
+
     product.name = name
     product.price = price
     product.image = image_url
+    product.image_public_id = upload_result["public_id"]
 
     db.commit()
 
