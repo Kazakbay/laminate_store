@@ -16,7 +16,11 @@
     <td>{{ p.name }}</td>
     <td>{{ p.price }} ₸</td>
     <td><img src="{{ p.image }}" width="200px"></td>
-
+    <td>
+      <a href="/products/{{ p.id }}/edit">
+        <button type="button">Edit</button>
+      </a>
+    </td>
   </tr>
   {% endfor %}
 </table>

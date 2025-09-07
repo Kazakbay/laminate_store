@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from database import SessionLocal, Product, Order
-from routers import cart, order, auth, admin
+from routers import cart, order, auth, admin, product
 import os
 
 app = FastAPI()
@@ -47,3 +47,4 @@ app.include_router(cart.router)
 app.include_router(order.router)
 app.include_router(admin.router)
 app.include_router(auth.router)
+app.include_router(product.router)
