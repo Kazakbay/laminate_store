@@ -6,12 +6,16 @@ from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from database import SessionLocal, Product, Order
+from database import SessionLocal, Product, Order, User
 from routers import cart, order, auth, admin, product
+from middleware import AuthMiddleware, get_current_user_from_cookie
 import os
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Add authentication middleware
+app.add_middleware(AuthMiddleware, protected_paths=["/admin"])
 
 templates = Jinja2Templates(directory="templates")
 USE_DOCKER = os.getenv("USE_DOCKER", "False") == "True"
@@ -40,7 +44,15 @@ async def home(request: Request, db: Session = Depends(get_db)):
         products = [{"id": p.id, "name": p.name, "price": p.price, "image":p.image} for p in db_products]
         # save to cache for 60 sec
         await redis_client.set("products", json.dumps(products), ex=60)
-    return templates.TemplateResponse("index.html", {"request": request, "products": products})
+    
+    # Get current user if authenticated
+    current_user = None
+    try:
+        current_user = get_current_user_from_cookie(request)
+    except:
+        pass  # User not authenticated
+    
+    return templates.TemplateResponse("index.html", {"request": request, "products": products, "current_user": current_user})
 
 
 app.include_router(cart.router)

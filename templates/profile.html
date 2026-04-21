@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="grid">
+<h2>User Profile</h2>
+<div class="profile-info">
+  <p><strong>Username:</strong> {{ current_user.username }}</p>
+  <p><strong>Email:</strong> {{ current_user.email }}</p>
+  <p><strong>Role:</strong> {% if current_user.is_admin %}Admin{% else %}Customer{% endif %}</p>
+  <p><strong>Member since:</strong> {{ current_user.created_at.strftime('%B %d, %Y') }}</p>
+</div>
+</div>
+{% endblock %}

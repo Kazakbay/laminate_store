@@ -3,7 +3,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from starlette.responses import RedirectResponse
-from database import Order, SessionLocal, Product
+from database import Order, SessionLocal, Product, User
+from middleware import get_current_user_from_cookie
 import shutil
 import cloudinary.uploader
 import io
@@ -31,21 +32,32 @@ def get_db():
     finally:
         db.close()
 
-
 # ---------- Admin Panel ----------
 @router.get("/", response_class=HTMLResponse)
 async def admin(request: Request, db: Session = Depends(get_db)):
+    # Get current user from middleware
+    current_user = get_current_user_from_cookie(request)
+    
     products = db.query(Product).all()
     orders = db.query(Order).all()
-    return templates.TemplateResponse("admin.html", {"request": request, "products": products, "orders": orders})
+    return templates.TemplateResponse("admin.html", {"request": request, "products": products, "orders": orders, "current_user": current_user})
 
 @router.get("/add", response_class=HTMLResponse)
 async def add_product_form(request: Request):
+    # Get current user from middleware
+    current_user = get_current_user_from_cookie(request)
     return templates.TemplateResponse("add_product.html", {"request": request})
 
 @router.post("/add")
 async def add_product(
-    name: str = Form(...), price: int = Form(...), file: UploadFile = File(...), db: Session = Depends(get_db)):
+    name: str = Form(...), 
+    price: int = Form(...), 
+    file: UploadFile = File(...), 
+    db: Session = Depends(get_db),
+    request: Request = None):
+    
+    # Get current user from middleware
+    current_user = get_current_user_from_cookie(request)
 
     # Open image with Pillow
     img = Image.open(file.file)
@@ -62,8 +74,6 @@ async def add_product(
     upload_result = cloudinary.uploader.upload(buffer)
 
     image_url = upload_result["secure_url"]
-
-
 
     # save product in DB with image URL
     new_product = Product(name=name, price=price, image=image_url)

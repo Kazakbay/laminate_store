@@ -8,16 +8,30 @@
 </head>
 <body>
   <header>
-    <h1>Laminate Store</h1>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/cart">Cart</a>
-      <a href="/order">Order</a>
-      <a href="/auth/login">Login</a>
-    </nav>
+    <div class="container navbar">
+      <div class="brand">
+        <div class="brand-logo"></div>
+        <div>Laminate Store</div>
+      </div>
+      <nav>
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/cart">Cart</a>
+        <a class="nav-link" href="/order">Order</a>
+        {% if current_user %}
+          {% if current_user.is_admin %}
+            <a class="nav-link" href="/admin">Admin</a>
+          {% endif %}
+          <a class="nav-link" href="/auth/profile">{{ current_user.username }}</a>
+          <a class="nav-cta" href="/auth/logout">Logout</a>
+        {% else %}
+          <a class="nav-link" href="/auth/login">Login</a>
+          <a class="nav-cta" href="/auth/register">Register</a>
+        {% endif %}
+      </nav>
+    </div>
   </header>
 
-  <main>
+  <main class="container">
     {% block content %}{% endblock %}
   </main>
 

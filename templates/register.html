@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="center">
+  <h2 class="section-title">Create your account</h2>
+  <p class="muted">Start shopping today</p>
+</div>
+
+<div class="form-card">
+  <form method="post" action="/auth/register">
+      <label>Username</label>
+      <input type="text" name="username" required>
+      <label>Email</label>
+      <input type="email" name="email" required>
+      <label>Password</label>
+      <input type="password" name="password" required>
+      <button type="submit">Register</button>
+  </form>
+  <div class="spacer"></div>
+  <p class="muted center">Already have an account? <a href="/auth/login">Login here</a></p>
+</div>
+{% endblock %}
