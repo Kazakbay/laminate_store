@@ -1,52 +1,83 @@
 # Laminate Store 🛒
 
-A prototype online store for a laminate shop, built with **FastAPI**, **JavaScript**, **HTML**, and **CSS**.  
-This project is a learning/practice project to showcase backend + frontend integration.
+Полноценный интернет-магазин ламината с авторизацией, корзиной и админ панелью.
 
 ---
 
-## 🚀 Features
-- 🛍️ Add and display products (name, price, image)  
-- 📂 File uploads (product images)  
-- 📄 Dynamic frontend with HTML, CSS, and JavaScript  
-- ⚡ Backend powered by FastAPI  
+## 🚀 Функционал
+
+- Регистрация и авторизация пользователей (JWT)
+- Каталог товаров с фотографиями
+- Корзина и оформление заказов
+- Админ панель для управления товарами
+- Миграции базы данных через Alembic
+- Кэширование через Redis
 
 ---
 
-## 🛠️ Tech Stack
-- **Backend:** FastAPI, SQLAlchemy  
-- **Frontend:** HTML, CSS, JavaScript  
-- **Database:** PostgreSQL (can be swapped with SQLite for testing)  
+## 🛠️ Технологии
+
+- **Backend:** FastAPI, SQLAlchemy, Alembic
+- **Frontend:** HTML, CSS, JavaScript, Jinja2
+- **Database:** PostgreSQL
+- **Cache:** Redis
+- **Auth:** JWT токены
+- **Deploy:** Docker, Docker Compose, Nginx
 
 ---
 
-## 📂 Project Structure
-```
+## 📂 Структура проекта
 laminate_store/
-│── main.py              # FastAPI entry point
-│── requirements.txt     # Project dependencies
-│── README.md            # Project description
-│── .gitignore           # Ignored files & folders
+├── main.py                    # FastAPI entry point
+├── database.py                # Подключение к БД
+├── auth_utils.py              # JWT авторизация
+├── middleware.py              # Middleware
 │
-├── static/              # Frontend assets
-│   ├── style.css
-│   └── script.js
+├── routers/                   # Роуты
+│   ├── admin.py               # Админ эндпоинты
+│   ├── auth.py                # Авторизация
+│   ├── cart.py                # Корзина
+│   ├── order.py               # Заказы
+│   └── product.py             # Товары
 │
-├── templates/           # HTML templates
+├── templates/                 # Jinja2 шаблоны
 │   ├── base.html
 │   ├── index.html
-│   ├── add_product.html
 │   ├── admin.html
 │   ├── cart.html
-│   └── order.html
+│   ├── login.html
+│   ├── register.html
+│   └── profile.html
 │
-├── uploads/             # Uploaded product images
+├── static/                    # CSS, JS
+├── alembic/                   # Миграции БД
+├── uploads/                   # Фото товаров
 │
-└── screenshots/         # Project screenshots (for README)
-```
-## 📦 Installation & Setup
+└── deployment/
+├── docker/
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── requirements.txt
+└── nginx/
+├── nginx.conf
+└── conf.d/fastapi.conf
 
-Clone the repository:
+---
+
+## 🐳 Запуск через Docker
+
 ```bash
 git clone https://github.com/Kazakbay/laminate_store.git
-cd laminate_store
+cd laminate_store/deployment/docker
+docker-compose up --build
+```
+
+Открой http://localhost
+
+---
+
+## 📸 Скриншоты
+
+![Главная](screenshots/main_page_advanced.png)
+![Админка](screenshots/admin_advanced.png)
+![Корзина](screenshots/cart.png)
