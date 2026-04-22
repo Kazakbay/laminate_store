@@ -27,6 +27,7 @@
 ---
 
 ## 📂 Структура проекта
+```
 laminate_store/
 ├── main.py                    # FastAPI entry point
 ├── database.py                # Подключение к БД
@@ -54,14 +55,14 @@ laminate_store/
 ├── uploads/                   # Фото товаров
 │
 └── deployment/
-├── docker/
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   └── requirements.txt
-└── nginx/
-├── nginx.conf
-└── conf.d/fastapi.conf
-
+    ├── docker/
+    │   ├── Dockerfile
+    │   ├── docker-compose.yml
+    │   └── requirements.txt
+    └── nginx/
+        ├── nginx.conf
+        └── conf.d/fastapi.conf
+```
 ---
 
 ## 🐳 Запуск через Docker
